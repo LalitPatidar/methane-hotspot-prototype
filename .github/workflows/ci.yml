@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install API deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r apps/api/requirements-dev.txt
+      - name: Lint API
+        run: ruff check apps/api
+      - name: Test API
+        run: PYTHONPATH=apps/api pytest apps/api/tests
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/web/package.json
+      - name: Install web deps
+        run: cd apps/web && npm install
+      - name: Lint web
+        run: cd apps/web && npm run lint
+      - name: Test web
+        run: cd apps/web && npm run test

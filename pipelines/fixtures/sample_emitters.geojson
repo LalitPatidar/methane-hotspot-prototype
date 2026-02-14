@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "em-001",
+        "name": "Permian Candidate 1",
+        "confidence": 0.88,
+        "detection_count": 12,
+        "last_seen": "2026-02-12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-103.8, 31.7]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "em-002",
+        "name": "Turkmenistan Candidate 7",
+        "confidence": 0.74,
+        "detection_count": 9,
+        "last_seen": "2026-02-11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [54.4, 38.9]
+      }
+    }
+  ]
+}
