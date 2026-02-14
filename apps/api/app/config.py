@@ -23,3 +23,17 @@ class HealthResponse(BaseModel):
 class DBHealthResponse(BaseModel):
     status: str
     detail: str
+
+
+class EmitterSummary(BaseModel):
+    id: str
+    name: str
+    confidence: float
+    detection_count: int
+    last_seen: str
+    latitude: float
+    longitude: float
+
+
+class EmittersResponse(BaseModel):
+    emitters: list[EmitterSummary]

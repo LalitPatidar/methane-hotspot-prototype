@@ -27,7 +27,7 @@ Monorepo scaffold for an MVP that ingests open methane datasets, detects hotspot
    ```
 
 ## Services
-- API: http://localhost:8000 (`/health`, `/version`, `/db/health`)
+- API: http://localhost:8000 (`/health`, `/version`, `/db/health`, `/emitters`)
 - Web: http://localhost:3000
 - PostGIS: localhost:5432
 
