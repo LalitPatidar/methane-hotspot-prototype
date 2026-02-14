@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from psycopg.errors import Error
 
-from .config import DBHealthResponse, HealthResponse, VersionResponse, settings
-from .db import check_db_connection
+from .config import DBHealthResponse, EmittersResponse, HealthResponse, VersionResponse, settings
+from .db import check_db_connection, list_emitters
 
 app = FastAPI(title="Methane Hotspot API", version=settings.app_version)
 
@@ -21,3 +22,13 @@ def db_health() -> DBHealthResponse:
     connected, detail = check_db_connection()
     status = "ok" if connected else "error"
     return DBHealthResponse(status=status, detail=detail)
+
+
+@app.get("/emitters", response_model=EmittersResponse)
+def get_emitters() -> EmittersResponse:
+    try:
+        emitters = list_emitters()
+    except Error as exc:
+        raise HTTPException(status_code=503, detail=f"database unavailable: {exc}") from exc
+
+    return EmittersResponse(emitters=emitters)
