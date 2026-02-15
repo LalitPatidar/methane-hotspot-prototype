@@ -37,3 +37,36 @@ class EmitterSummary(BaseModel):
 
 class EmittersResponse(BaseModel):
     emitters: list[EmitterSummary]
+
+
+class HotspotEvidence(BaseModel):
+    hotspot_id: str
+    observed_on: str
+    anomaly_score: float
+    area_km2: float
+    pixel_count: int
+    qa_pass_ratio: float
+
+
+class EmitterDetail(EmitterSummary):
+    hotspot_evidence: list[HotspotEvidence]
+
+
+class HotspotSummary(BaseModel):
+    id: str
+    emitter_id: str | None
+    observed_on: str
+    anomaly_score: float
+    area_km2: float
+    pixel_count: int
+    qa_pass_ratio: float
+    centroid_latitude: float
+    centroid_longitude: float
+
+
+class EmitterDetailResponse(BaseModel):
+    emitter: EmitterDetail
+
+
+class HotspotsResponse(BaseModel):
+    hotspots: list[HotspotSummary]
