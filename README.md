@@ -39,3 +39,7 @@ Monorepo scaffold for an MVP that ingests open methane datasets, detects hotspot
 - `pipelines/fixtures` — sample data fixtures
 - `migrations` — SQL schema migrations
 - `docs` — architecture, API contract, methods, data sources
+
+## Specs-driven development
+- Use `docs/specs/README.md` as the entrypoint for requirements, roadmap, and delivery workflow.
+- Create feature specs under `docs/specs/features/` before implementation work.
