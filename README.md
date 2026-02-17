@@ -50,6 +50,6 @@ Monorepo scaffold for an MVP that ingests open methane datasets, detects hotspot
 - Create feature specs under `docs/specs/features/` before implementation work.
 
 ## Pipeline smoke runbook
-- `make ingest` writes fixture-backed raw + processed artifacts under `pipelines/artifacts/ingest/<run_id>/`.
+- `make ingest` writes raw + processed artifacts under `pipelines/artifacts/ingest/<run_id>/` (default `--source fixture`; use `INGEST_SOURCE=real` when the real adapter is implemented).
 - `make detect` reads the latest ingest run and writes hotspot evidence under `pipelines/artifacts/detect/<run_id>/`.
 - Tune thresholds with env vars (for example `INGEST_QA_THRESHOLD=0.9 DETECT_ANOMALY_THRESHOLD_PPB=60 make detect`).
