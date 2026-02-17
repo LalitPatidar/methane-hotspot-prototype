@@ -35,7 +35,7 @@ Use this loop for every coding turn:
   - 2026-02-17: Added `--source {fixture,real}` ingest selection with fixture default, retained artifact contract, and added a guardrail error for unimplemented real source path plus tests.
 
 ### T1.2 Implement real TROPOMI fetch adapter (MVP path)
-- **Status:** `ready`
+- **Status:** `done`
 - **Goal:** Fetch open TROPOMI observations by AOI/date and normalize to project observation schema.
 - **Scope:**
   - Add adapter module under `pipelines/jobs/` (or `pipelines/sources/`).
@@ -45,10 +45,10 @@ Use this loop for every coding turn:
   - Real-source mode writes deterministic artifacts for the same AOI/date run.
   - No secrets committed; credentials (if any) only via env vars.
 - **Progress notes:**
-  - None yet.
+  - 2026-02-17: Added a real-source URL adapter with deterministic normalization/sorting, persisted `source_urls` provenance in ingest artifacts, and added tests for URL requirements plus normalized real-source output.
 
 ### T1.3 AOI parsing + validation
-- **Status:** `pending`
+- **Status:** `ready`
 - **Goal:** Support stable AOI definitions for reproducible ingest.
 - **Scope:**
   - Support AOI as named preset and/or bbox (`min_lon,min_lat,max_lon,max_lat`).
