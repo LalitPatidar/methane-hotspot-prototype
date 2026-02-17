@@ -5,6 +5,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Callable
 
+from tropomi_real_adapter import load_real_tropomi_payload
+
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_FIXTURE = ROOT / "pipelines" / "fixtures" / "sample_tropomi_observations.json"
 DEFAULT_OUTPUT_ROOT = ROOT / "pipelines" / "artifacts"
@@ -14,8 +16,17 @@ def fixture_source(args: argparse.Namespace) -> dict:
     return json.loads(args.fixture.read_text())
 
 
-def real_source(_: argparse.Namespace) -> dict:
-    raise NotImplementedError("Real TROPOMI source is not implemented yet. Use --source fixture.")
+def real_source(args: argparse.Namespace) -> dict:
+    if not args.real_source_url:
+        raise ValueError("--real-source-url (or INGEST_REAL_SOURCE_URL) is required when --source=real")
+
+    return load_real_tropomi_payload(
+        args.real_source_url,
+        start_date=args.start_date,
+        end_date=args.end_date,
+        aoi=args.aoi,
+        timeout_seconds=args.real_source_timeout_seconds,
+    )
 
 
 SOURCE_READERS: dict[str, Callable[[argparse.Namespace], dict]] = {
@@ -37,6 +48,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--end-date", default=os.getenv("INGEST_END_DATE", "2026-02-11"))
     parser.add_argument("--qa-threshold", type=float, default=float(os.getenv("INGEST_QA_THRESHOLD", "0.85")))
     parser.add_argument("--fixture", type=Path, default=Path(os.getenv("INGEST_FIXTURE_PATH", DEFAULT_FIXTURE)))
+    parser.add_argument("--real-source-url", default=os.getenv("INGEST_REAL_SOURCE_URL"))
+    parser.add_argument(
+        "--real-source-timeout-seconds",
+        type=float,
+        default=float(os.getenv("INGEST_REAL_SOURCE_TIMEOUT_SECONDS", "30")),
+    )
     parser.add_argument("--output-root", type=Path, default=Path(os.getenv("PIPELINE_ARTIFACT_ROOT", DEFAULT_OUTPUT_ROOT)))
     return parser.parse_args()
 
@@ -60,7 +77,8 @@ def main() -> None:
         "product": payload["product"],
         "version": payload["version"],
         "source": args.source,
-        "source_fixture": str(args.fixture),
+        "source_fixture": str(args.fixture) if args.source == "fixture" else None,
+        "source_urls": payload.get("source_urls", []),
         "raw_observation_ids": [obs["observation_id"] for obs in observations],
     }
     processed = {
@@ -85,7 +103,8 @@ def main() -> None:
         "end_date": args.end_date,
         "qa_threshold": args.qa_threshold,
         "source": args.source,
-        "source_fixture": str(args.fixture),
+        "source_fixture": str(args.fixture) if args.source == "fixture" else None,
+        "source_urls": payload.get("source_urls", []),
         "raw_count": len(observations),
         "qa_pass_count": len(passed),
         "qa_fail_count": len(dropped),

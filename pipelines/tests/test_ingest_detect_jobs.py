@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[2]
 INGEST_JOB = ROOT / "pipelines" / "jobs" / "ingest_tropomi.py"
 DETECT_JOB = ROOT / "pipelines" / "jobs" / "detect_hotspots.py"
 FIXTURE = ROOT / "pipelines" / "fixtures" / "sample_tropomi_observations.json"
+REAL_SOURCE_FIXTURE = ROOT / "pipelines" / "fixtures" / "sample_tropomi_real_source.json"
 
 
 def test_ingest_writes_raw_processed_and_metadata(tmp_path: Path) -> None:
@@ -44,8 +45,7 @@ def test_ingest_writes_raw_processed_and_metadata(tmp_path: Path) -> None:
     assert len(processed["observations"]) == 2
 
 
-
-def test_ingest_real_source_not_implemented(tmp_path: Path) -> None:
+def test_ingest_real_source_requires_url(tmp_path: Path) -> None:
     result = subprocess.run(
         [
             sys.executable,
@@ -60,7 +60,45 @@ def test_ingest_real_source_not_implemented(tmp_path: Path) -> None:
     )
 
     assert result.returncode != 0
-    assert "Real TROPOMI source is not implemented yet" in result.stderr
+    assert "--real-source-url" in result.stderr
+
+
+def test_ingest_real_source_normalizes_and_tracks_source_urls(tmp_path: Path) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(INGEST_JOB),
+            "--source",
+            "real",
+            "--real-source-url",
+            f"file://{REAL_SOURCE_FIXTURE.resolve()}",
+            "--aoi",
+            "permian-test",
+            "--start-date",
+            "2026-02-10",
+            "--end-date",
+            "2026-02-11",
+            "--qa-threshold",
+            "0.9",
+            "--output-root",
+            str(tmp_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    run_id = json.loads(result.stdout.strip())["run_id"]
+    raw_refs = json.loads((tmp_path / "ingest" / run_id / "raw" / "raw_refs.json").read_text())
+    metadata = json.loads((tmp_path / "ingest" / run_id / "metadata.json").read_text())
+    processed = json.loads((tmp_path / "ingest" / run_id / "processed" / "observations.json").read_text())
+
+    assert metadata["source"] == "real"
+    assert metadata["source_fixture"] is None
+    assert len(metadata["source_urls"]) == 1
+    assert "start_date=2026-02-10" in metadata["source_urls"][0]
+    assert raw_refs["raw_observation_ids"] == ["S5P-R1", "S5P-R2", "S5P-R3"]
+    assert [obs["observation_id"] for obs in processed["observations"]] == ["S5P-R1", "S5P-R3"]
 
 
 def test_detect_generates_explainable_hotspots(tmp_path: Path) -> None:
