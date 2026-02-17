@@ -1,0 +1,39 @@
+{
+  "dataset": "sentinel-5p",
+  "product": "tropomi_ch4",
+  "version": "offline-v01",
+  "observations": [
+    {
+      "observation_id": "obs-0001",
+      "observed_on": "2026-02-10",
+      "latitude": 31.700,
+      "longitude": -102.100,
+      "ch4_ppb": 1910.0,
+      "qa_value": 0.82
+    },
+    {
+      "observation_id": "obs-0002",
+      "observed_on": "2026-02-10",
+      "latitude": 31.710,
+      "longitude": -102.090,
+      "ch4_ppb": 1998.0,
+      "qa_value": 0.91
+    },
+    {
+      "observation_id": "obs-0003",
+      "observed_on": "2026-02-10",
+      "latitude": 31.725,
+      "longitude": -102.110,
+      "ch4_ppb": 2055.0,
+      "qa_value": 0.95
+    },
+    {
+      "observation_id": "obs-0004",
+      "observed_on": "2026-02-11",
+      "latitude": 31.730,
+      "longitude": -102.115,
+      "ch4_ppb": 2102.0,
+      "qa_value": 0.89
+    }
+  ]
+}

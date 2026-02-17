@@ -25,7 +25,7 @@
 ### Docs + operations
 - Project docs for architecture, API contract, detection method, and data sources.
 - Core developer commands available:
-  - `make setup`, `make dev`, `make test`, `make lint`, `make seed`.
+  - `make setup`, `make dev`, `make test`, `make lint`, `make seed`, `make ingest`, `make detect`.
 
 ## 2) Gaps vs MVP success criteria
 
@@ -55,7 +55,7 @@ The AGENTS mission defines MVP success as:
 - No emitter detail panel with evidence charts/time series.
 
 #### D. Operational maturity gaps
-- `make ingest` and `make detect` are expected by repository rules but not yet implemented.
+- Ingest/detect are currently fixture-backed smoke jobs; production remote granule acquisition is still pending.
 - No explicit scheduler/invocation strategy documented for repeatable runs.
 - Limited observability and debug artifact retention strategy.
 

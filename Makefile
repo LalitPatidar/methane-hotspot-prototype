@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: setup dev test lint seed db-up db-down
+.PHONY: setup dev test lint seed ingest detect db-up db-down
 
 setup:
 	python3 -m venv .venv
@@ -20,7 +20,7 @@ dev: ensure-env
 	docker compose up --build
 
 test:
-	. .venv/bin/activate && PYTHONPATH=apps/api pytest apps/api/tests
+	. .venv/bin/activate && PYTHONPATH=apps/api pytest apps/api/tests pipelines/tests
 	cd apps/web && npm run test
 
 lint:
@@ -29,3 +29,9 @@ lint:
 
 seed: db-up
 	. .venv/bin/activate && python pipelines/jobs/seed_sample_data.py
+
+ingest:
+	. .venv/bin/activate && python pipelines/jobs/ingest_tropomi.py
+
+detect:
+	. .venv/bin/activate && python pipelines/jobs/detect_hotspots.py

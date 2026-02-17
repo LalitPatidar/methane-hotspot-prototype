@@ -4,7 +4,7 @@
 - [ ] Add pipeline job to ingest TROPOMI by AOI/date range
 - [ ] Add configurable QA filter and metadata capture
 - [ ] Store raw references + processed artifact pointers
-- [ ] Add tests with fixtures
+- [x] Add tests with fixtures
 
 ## 2) Anomaly + hotspot polygons
 - [ ] Implement background estimation + anomaly scoring
