@@ -20,7 +20,12 @@ Monorepo scaffold for an MVP that ingests open methane datasets, detects hotspot
    ```bash
    make seed
    ```
-5. Run tests and lint:
+5. Run pipeline smoke stages:
+   ```bash
+   make ingest
+   make detect
+   ```
+6. Run tests and lint:
    ```bash
    make test
    make lint
@@ -43,3 +48,8 @@ Monorepo scaffold for an MVP that ingests open methane datasets, detects hotspot
 ## Specs-driven development
 - Use `docs/specs/README.md` as the entrypoint for requirements, roadmap, and delivery workflow.
 - Create feature specs under `docs/specs/features/` before implementation work.
+
+## Pipeline smoke runbook
+- `make ingest` writes fixture-backed raw + processed artifacts under `pipelines/artifacts/ingest/<run_id>/`.
+- `make detect` reads the latest ingest run and writes hotspot evidence under `pipelines/artifacts/detect/<run_id>/`.
+- Tune thresholds with env vars (for example `INGEST_QA_THRESHOLD=0.9 DETECT_ANOMALY_THRESHOLD_PPB=60 make detect`).
