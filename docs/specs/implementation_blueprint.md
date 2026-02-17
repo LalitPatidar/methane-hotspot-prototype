@@ -23,7 +23,7 @@ Use this loop for every coding turn:
 ## Phase 1 — Real TROPOMI ingest adapter (Milestone 1)
 
 ### T1.1 Add source abstraction for ingest input
-- **Status:** `ready`
+- **Status:** `done`
 - **Goal:** Let ingest run from either fixture or real data source without breaking command interface.
 - **Scope:**
   - Add `--source {fixture,real}` (default fixture for safety).
@@ -32,10 +32,10 @@ Use this loop for every coding turn:
   - `make ingest` still works with fixture mode.
   - Existing ingest tests pass.
 - **Progress notes:**
-  - None yet.
+  - 2026-02-17: Added `--source {fixture,real}` ingest selection with fixture default, retained artifact contract, and added a guardrail error for unimplemented real source path plus tests.
 
 ### T1.2 Implement real TROPOMI fetch adapter (MVP path)
-- **Status:** `pending`
+- **Status:** `ready`
 - **Goal:** Fetch open TROPOMI observations by AOI/date and normalize to project observation schema.
 - **Scope:**
   - Add adapter module under `pipelines/jobs/` (or `pipelines/sources/`).

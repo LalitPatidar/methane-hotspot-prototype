@@ -38,9 +38,29 @@ def test_ingest_writes_raw_processed_and_metadata(tmp_path: Path) -> None:
     processed = json.loads((tmp_path / "ingest" / run_id / "processed" / "observations.json").read_text())
 
     assert metadata["qa_threshold"] == 0.9
+    assert metadata["source"] == "fixture"
     assert metadata["qa_pass_count"] == 2
     assert metadata["qa_fail_count"] == 2
     assert len(processed["observations"]) == 2
+
+
+
+def test_ingest_real_source_not_implemented(tmp_path: Path) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(INGEST_JOB),
+            "--source",
+            "real",
+            "--output-root",
+            str(tmp_path),
+        ],
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode != 0
+    assert "Real TROPOMI source is not implemented yet" in result.stderr
 
 
 def test_detect_generates_explainable_hotspots(tmp_path: Path) -> None:
