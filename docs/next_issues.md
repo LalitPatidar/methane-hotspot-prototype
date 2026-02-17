@@ -1,4 +1,10 @@
-# Next Issues (create on GitHub)
+# Next Issues (reference backlog)
+
+This file is now a lightweight reference list.
+For execution order, status, and the day-to-day "do next task and update docs" loop, use:
+- `docs/specs/implementation_blueprint.md`
+
+## Legacy issue themes
 
 ## 1) TROPOMI ingest (AOI + date range)
 - [ ] Add pipeline job to ingest TROPOMI by AOI/date range
