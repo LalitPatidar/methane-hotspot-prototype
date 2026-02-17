@@ -19,9 +19,14 @@ This folder defines a specs-driven workflow for delivering the methane hotspot M
    - Day-to-day spec process (how to write and execute specs before coding).
    - Templates for feature specs and executable task checklists.
 
+5. `implementation_blueprint.md`
+   - Ordered execution backlog with task IDs and status.
+   - Canonical "next task" loop document for incremental delivery.
+
 ## How to use
 
 - Start each new feature by creating a short feature spec based on `spec_workflow.md`.
 - Verify the feature maps to at least one requirement in `mvp_system_spec.md`.
 - Ensure milestone alignment using `implementation_roadmap.md`.
 - Keep `current_state_analysis.md` updated as capabilities land.
+- Use `implementation_blueprint.md` as the canonical source for the next implementation task.
