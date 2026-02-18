@@ -1,0 +1,28 @@
+{
+  "points": [
+    {
+      "lat": 31.4,
+      "lon": -103.2,
+      "ch4_ppb": 1880.0,
+      "qa_value": 0.92,
+      "observed_on": "2026-02-01",
+      "source": "S5P_OFFL_L3_CH4"
+    },
+    {
+      "lat": 31.6,
+      "lon": -103.0,
+      "ch4_ppb": 1935.0,
+      "qa_value": 0.96,
+      "observed_on": "2026-02-01",
+      "source": "S5P_OFFL_L3_CH4"
+    },
+    {
+      "lat": 31.8,
+      "lon": -102.8,
+      "ch4_ppb": 1905.0,
+      "qa_value": 0.45,
+      "observed_on": "2026-02-01",
+      "source": "S5P_OFFL_L3_CH4"
+    }
+  ]
+}

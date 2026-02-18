@@ -4,3 +4,7 @@ psycopg[binary]==3.2.3
 python-dotenv==1.0.1
 pydantic==2.10.4
 pydantic-settings==2.7.0
+earthengine-api==1.5.2
+google-auth==2.38.0
+pandas==2.2.3
+pyarrow==18.1.0
