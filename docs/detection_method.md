@@ -21,6 +21,8 @@
 
 ## Current smoke implementation
 - `make ingest` uses a local TROPOMI-like fixture and applies configurable QA filtering (`INGEST_QA_THRESHOLD`, default `0.85`).
+- `make fetch_gee aoi=<name> start=<YYYY-MM-DD> end=<YYYY-MM-DD>` fetches real S5P L3 CH4 from GEE (`COPERNICUS/S5P/OFFL/L3_CH4`) and writes sampled points to `pipelines/artifacts/source/gee/<run_id>/points.parquet`.
+- `make ingest_gee ...` converts the sampled Parquet points into ingest `observations.json` so `make detect` can run unmodified on real-source observations.
 - Raw references and processed observations are written separately with stage metadata for provenance.
 - `make detect` computes a median CH4 background on ingested observations, then flags hotspots when `anomaly_score = observed - background` exceeds `DETECT_ANOMALY_THRESHOLD_PPB` (default `40`).
 - Each candidate stores explainability fields (`anomaly_score`, `threshold`, `qa_pass_ratio`, `pixel_count`, `area_km2`, centroid).

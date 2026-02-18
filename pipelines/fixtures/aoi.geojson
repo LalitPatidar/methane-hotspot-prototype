@@ -1,0 +1,47 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name": "permian"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-104.9, 30.3],
+          [-100.0, 30.3],
+          [-100.0, 33.0],
+          [-104.9, 33.0],
+          [-104.9, 30.3]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "four-corners"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-109.5, 35.0],
+          [-107.0, 35.0],
+          [-107.0, 37.5],
+          [-109.5, 37.5],
+          [-109.5, 35.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"name": "marcellus"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-80.9, 39.0],
+          [-76.5, 39.0],
+          [-76.5, 42.5],
+          [-80.9, 42.5],
+          [-80.9, 39.0]
+        ]]
+      }
+    }
+  ]
+}

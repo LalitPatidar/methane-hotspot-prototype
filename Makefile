@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: setup dev test lint seed ingest detect db-up db-down
+.PHONY: setup dev test lint seed ingest detect fetch_gee ingest_gee demo_gee db-up db-down
 
 setup:
 	python3 -m venv .venv
@@ -34,4 +34,23 @@ ingest:
 	. .venv/bin/activate && python pipelines/jobs/ingest_tropomi.py
 
 detect:
-	. .venv/bin/activate && python pipelines/jobs/detect_hotspots.py
+	. .venv/bin/activate && if [ -n "$(aoi)" ] && [ -n "$(start)" ] && [ -n "$(end)" ]; then \
+		python pipelines/jobs/detect_hotspots.py --ingest-run-id "$(start)_$(end)_$(aoi)"; \
+	else \
+		python pipelines/jobs/detect_hotspots.py; \
+	fi
+
+fetch_gee:
+	. .venv/bin/activate && AOI=$${aoi:-permian} START=$${start:-2026-02-01} END=$${end:-2026-02-07} python pipelines/jobs/fetch_gee_ch4.py --aoi "$$AOI" --start "$$START" --end "$$END"
+
+ingest_gee:
+	. .venv/bin/activate && AOI=$${aoi:-permian} START=$${start:-2026-02-01} END=$${end:-2026-02-07}; \
+	if [ ! -f "pipelines/artifacts/source/gee/$$START_$$END_$$AOI/points.parquet" ]; then \
+		python pipelines/jobs/fetch_gee_ch4.py --aoi "$$AOI" --start "$$START" --end "$$END"; \
+	fi; \
+	python pipelines/jobs/ingest_gee_ch4.py --aoi "$$AOI" --start "$$START" --end "$$END"
+
+demo_gee:
+	$(MAKE) fetch_gee aoi=$(aoi) start=$(start) end=$(end)
+	$(MAKE) ingest_gee aoi=$(aoi) start=$(start) end=$(end)
+	$(MAKE) detect aoi=$(aoi) start=$(start) end=$(end)
