@@ -48,7 +48,7 @@ Use this loop for every coding turn:
   - 2026-02-17: Added a real-source URL adapter with deterministic normalization/sorting, persisted `source_urls` provenance in ingest artifacts, and added tests for URL requirements plus normalized real-source output.
 
 ### T1.3 AOI parsing + validation
-- **Status:** `ready`
+- **Status:** `done`
 - **Goal:** Support stable AOI definitions for reproducible ingest.
 - **Scope:**
   - Support AOI as named preset and/or bbox (`min_lon,min_lat,max_lon,max_lat`).
@@ -57,10 +57,10 @@ Use this loop for every coding turn:
   - Invalid AOI returns clear error.
   - Tests cover bbox parsing and validation failures.
 - **Progress notes:**
-  - None yet.
+  - 2026-02-28: Added AOI preset lookup and bbox parsing/validation with canonical AOI metadata fields, plus ingest tests for valid bbox and invalid coordinate ordering.
 
 ### T1.4 QA filtering hardening
-- **Status:** `pending`
+- **Status:** `ready`
 - **Goal:** Keep QA filtering configurable and explicit in metadata.
 - **Scope:**
   - Ensure QA threshold is applied identically across fixture/real modes.
