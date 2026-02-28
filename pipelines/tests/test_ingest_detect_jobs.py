@@ -16,7 +16,7 @@ def test_ingest_writes_raw_processed_and_metadata(tmp_path: Path) -> None:
             sys.executable,
             str(INGEST_JOB),
             "--aoi",
-            "permian-test",
+            "permian",
             "--start-date",
             "2026-02-10",
             "--end-date",
@@ -73,7 +73,7 @@ def test_ingest_real_source_normalizes_and_tracks_source_urls(tmp_path: Path) ->
             "--real-source-url",
             f"file://{REAL_SOURCE_FIXTURE.resolve()}",
             "--aoi",
-            "permian-test",
+            "permian",
             "--start-date",
             "2026-02-10",
             "--end-date",
@@ -107,7 +107,7 @@ def test_detect_generates_explainable_hotspots(tmp_path: Path) -> None:
             sys.executable,
             str(INGEST_JOB),
             "--aoi",
-            "permian-test",
+            "permian",
             "--start-date",
             "2026-02-10",
             "--end-date",
@@ -127,7 +127,7 @@ def test_detect_generates_explainable_hotspots(tmp_path: Path) -> None:
             sys.executable,
             str(DETECT_JOB),
             "--ingest-run-id",
-            "2026-02-10_2026-02-11_permian-test",
+            "2026-02-10_2026-02-11_permian",
             "--anomaly-threshold-ppb",
             "40",
             "--output-root",
@@ -141,8 +141,54 @@ def test_detect_generates_explainable_hotspots(tmp_path: Path) -> None:
     run_id = payload["run_id"]
 
     hotspots = json.loads((tmp_path / "detect" / run_id / "hotspots.json").read_text())
-    assert hotspots["ingest_run_id"] == "2026-02-10_2026-02-11_permian-test"
+    assert hotspots["ingest_run_id"] == "2026-02-10_2026-02-11_permian"
     assert len(hotspots["hotspots"]) == 1
     assert hotspots["hotspots"][0]["anomaly_score"] == 47.0
     assert hotspots["hotspots"][0]["qa_pass_ratio"] == 0.75
     assert hotspots["hotspots"][0]["pixel_count"] == 1
+
+
+def test_ingest_accepts_bbox_aoi_and_records_bbox_metadata(tmp_path: Path) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(INGEST_JOB),
+            "--aoi=-104.9,30.3,-100.0,33.0",
+            "--start-date",
+            "2026-02-10",
+            "--end-date",
+            "2026-02-11",
+            "--fixture",
+            str(FIXTURE),
+            "--output-root",
+            str(tmp_path),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    run_id = json.loads(result.stdout.strip())["run_id"]
+    metadata = json.loads((tmp_path / "ingest" / run_id / "metadata.json").read_text())
+
+    assert metadata["aoi"] == "bbox:-104.900000,30.300000,-100.000000,33.000000"
+    assert metadata["aoi_bbox"] == [-104.9, 30.3, -100.0, 33.0]
+
+
+def test_ingest_rejects_invalid_bbox_aoi(tmp_path: Path) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(INGEST_JOB),
+            "--aoi=-100,30,-101,33",
+            "--fixture",
+            str(FIXTURE),
+            "--output-root",
+            str(tmp_path),
+        ],
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode != 0
+    assert "min_lon must be less than max_lon" in result.stderr
